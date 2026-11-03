@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RailGo - Train Management System</title>
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 10% 20%, #dbeafe 0, transparent 30%),
+                radial-gradient(circle at 90% 80%, #ede9fe 0, transparent 30%),
+                linear-gradient(135deg, #f8fbff, #eef2ff);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow-x: hidden;
+        }
+
+        /* Background circles */
+
+        .circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(2px);
+            z-index: -1;
+        }
+
+        .circle-one {
+            width: 280px;
+            height: 280px;
+            background: #bfdbfe;
+            top: -100px;
+            left: -80px;
+            opacity: 0.6;
+        }
+
+        .circle-two {
+            width: 350px;
+            height: 350px;
+            background: #ddd6fe;
+            bottom: -150px;
+            right: -100px;
+            opacity: 0.6;
+        }
+
+        /* Main */
+
+        .main-container {
+            width: 100%;
+            max-width: 1100px;
+            padding: 30px;
+        }
+
+        /* Header */
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 22px;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+            );
+
+            color: white;
+
+            font-size: 38px;
+
+            box-shadow:
+                0 15px 35px rgba(37, 99, 235, 0.3);
+        }
+
+        .header h1 {
+            font-size: 42px;
+            color: #111827;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .header h1 span {
+            color: #2563eb;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 17px;
+        }
+
+        /* Welcome */
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .welcome h2 {
+            font-size: 27px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #64748b;
+        }
+
+        /* Cards */
+
+        .login-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .option-card {
+            background: rgba(255,255,255,0.88);
+
+            border: 1px solid rgba(226,232,240,0.9);
+
+            border-radius: 25px;
+
+            padding: 40px;
+
+            text-align: center;
+
+            box-shadow:
+                0 20px 50px rgba(15,23,42,0.10);
+
+            transition:
+                transform 0.3s,
+                box-shadow 0.3s;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: "";
+
+            position: absolute;
+
+            width: 150px;
+            height: 150px;
+
+            border-radius: 50%;
+
+            top: -70px;
+            right: -70px;
+
+            opacity: 0.12;
+        }
+
+        .admin-card::before {
+            background: #4f46e5;
+        }
+
+        .user-card::before {
+            background: #2563eb;
+        }
+
+        .option-card:hover {
+            transform: translateY(-10px);
+
+            box-shadow:
+                0 30px 60px rgba(15,23,42,0.16);
+        }
+
+        /* Icons */
+
+        .option-icon {
+            width: 85px;
+            height: 85px;
+
+            margin: 0 auto 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 24px;
+
+            font-size: 40px;
+
+            color: white;
+        }
+
+        .admin-icon {
+            background: linear-gradient(
+                135deg,
+                #4f46e5,
+                #7c3aed
+            );
+
+            box-shadow:
+                0 12px 25px rgba(79,70,229,0.3);
+        }
+
+        .user-icon {
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #06b6d4
+            );
+
+            box-shadow:
+                0 12px 25px rgba(37,99,235,0.3);
+        }
+
+        .option-card h3 {
+            font-size: 25px;
+            color: #172033;
+            margin-bottom: 10px;
+        }
+
+        .option-card p {
+            color: #64748b;
+            line-height: 1.6;
+            min-height: 52px;
+        }
+
+        /* Button */
+
+        .continue-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 10px;
+
+            margin-top: 25px;
+
+            width: 100%;
+
+            padding: 14px 20px;
+
+            border-radius: 13px;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            transition: 0.25s;
+        }
+
+        .admin-btn {
+            background: linear-gradient(
+                135deg,
+                #4f46e5,
+                #7c3aed
+            );
+        }
+
+        .user-btn {
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #0891b2
+            );
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+
+            color: white;
+
+            box-shadow:
+                0 10px 25px rgba(37,99,235,0.25);
+        }
+
+        /* Features */
+
+        .features {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 45px;
+
+            margin-top: 38px;
+
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+        .feature i {
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        /* Footer */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 30px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 700px) {
+
+            .main-container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .login-options {
+                grid-template-columns: 1fr;
+            }
+
+            .option-card {
+                padding: 30px;
+            }
+
+            .features {
+                gap: 20px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="circle circle-one"></div>
+    <div class="circle circle-two"></div>
+
+
+    <div class="main-container">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div class="logo">
+                <i class="bi bi-train-front-fill"></i>
+            </div>
+
+            <h1>
+                <span>RailGo</span>
+                Train Management System
+            </h1>
+
+            <p>
+                Smart • Secure • Simple Railway Management
+            </p>
+
+        </div>
+
+
+        <!-- WELCOME -->
+
+        <div class="welcome">
+
+            <h2>
+                Welcome to RailGo 🚆
+            </h2>
+
+            <p>
+                Please select how you want to continue
+            </p>
+
+        </div>
+
+
+        <!-- LOGIN OPTIONS -->
+
+        <div class="login-options">
+
+
+            <!-- ADMIN -->
+
+            <div class="option-card admin-card">
+
+                <div class="option-icon admin-icon">
+
+                    <i class="bi bi-shield-lock-fill"></i>
+
+                </div>
+
+                <h3>
+                    Admin Portal
+                </h3>
+
+                <p>
+                    Manage trains, stations, schedules,
+                    passengers and the complete railway system.
+                </p>
+
+                <a
+                    href="admin-login.html"
+                    class="continue-btn admin-btn">
+
+                    <i class="bi bi-box-arrow-in-right"></i>
+
+                    Admin Login
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- USER -->
+
+            <div class="option-card user-card">
+
+                <div class="option-icon user-icon">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                <h3>
+                    Passenger Portal
+                </h3>
+
+                <p>
+                    Book train tickets, view your journeys,
+                    manage bookings and update your profile.
+                </p>
+
+                <a
+                    href="user-login.html"
+                    class="continue-btn user-btn">
+
+                    <i class="bi bi-person-check-fill"></i>
+
+                    Passenger Login
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- FEATURES -->
+
+        <div class="features">
+
+            <div class="feature">
+
+                <i class="bi bi-shield-check"></i>
+
+                <span>
+                    Secure System
+                </span>
+
+            </div>
+
+
+            <div class="feature">
+
+                <i class="bi bi-ticket-perforated-fill"></i>
+
+                <span>
+                    Easy Ticket Booking
+                </span>
+
+            </div>
+
+
+            <div class="feature">
+
+                <i class="bi bi-clock-fill"></i>
+
+                <span>
+                    Fast & Reliable
+                </span>
+
+            </div>
+
+
+            <div class="feature">
+
+                <i class="bi bi-headset"></i>
+
+                <span>
+                    Passenger Support
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            © 2026 RailGo Train Management System
+            <br>
+            Your journey starts here 🚆
+
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>

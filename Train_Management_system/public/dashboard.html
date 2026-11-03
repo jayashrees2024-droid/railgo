@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Train Management System - Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="top-header">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="bi bi-train-front-fill"></i>
+            </div>
+
+            <div>
+                <h2>Train Management</h2>
+                <span>Railway Administration System</span>
+            </div>
+        </div>
+
+        <div class="admin-area">
+
+            <div class="admin-info">
+                <div class="admin-icon">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+                    <strong>Admin</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+
+            <a href="index.html" class="logout-btn">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN LAYOUT ================= -->
+
+    <div class="page-layout">
+
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                <span>MAIN MENU</span>
+            </div>
+
+            <nav>
+
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="trains.html" class="nav-item">
+                    <i class="bi bi-train-front"></i>
+                    <span>Trains</span>
+                </a>
+
+                <a href="stations.html" class="nav-item">
+                    <i class="bi bi-building"></i>
+                    <span>Stations</span>
+                </a>
+
+                <a href="schedules.html" class="nav-item">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Schedules</span>
+                </a>
+
+                <a href="passengers.html" class="nav-item">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Passengers</span>
+                </a>
+
+                <a href="tickets.html" class="nav-item">
+                    <i class="bi bi-ticket-perforated-fill"></i>
+                    <span>Tickets</span>
+                </a>
+
+            </nav>
+
+
+            <!-- Sidebar Bottom -->
+
+            <div class="sidebar-bottom">
+
+                <div class="system-status">
+
+                    <span class="status-dot"></span>
+
+                    <div>
+                        <strong>System Online</strong>
+                        <small>All services running</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <main class="main-content">
+
+
+            <!-- Page Heading -->
+
+            <div class="page-heading">
+
+                <div>
+                    <span class="welcome-text">
+                        ADMIN DASHBOARD
+                    </span>
+
+                    <h1>
+                        Welcome Back!
+                    </h1>
+
+                    <p>
+                        Here's an overview of your railway management system.
+                    </p>
+                </div>
+
+                <div class="dashboard-date">
+                    <i class="bi bi-calendar-event"></i>
+                    <span id="currentDate"></span>
+                </div>
+
+            </div>
+
+
+            <!-- ================= STATISTICS ================= -->
+
+            <section class="stats-grid">
+
+
+                <!-- Trains -->
+
+                <div class="stat-card">
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            TOTAL TRAINS
+                        </span>
+
+                        <h2 id="trainCount">
+                            0
+                        </h2>
+
+                        <a href="trains.html">
+                            View trains
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+
+                    <div class="stat-icon train-icon">
+                        <i class="bi bi-train-front-fill"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- Stations -->
+
+                <div class="stat-card">
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            TOTAL STATIONS
+                        </span>
+
+                        <h2 id="stationCount">
+                            0
+                        </h2>
+
+                        <a href="stations.html">
+                            View stations
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+
+                    <div class="stat-icon station-icon">
+                        <i class="bi bi-building-fill"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- Schedules -->
+
+                <div class="stat-card">
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            TOTAL SCHEDULES
+                        </span>
+
+                        <h2 id="scheduleCount">
+                            0
+                        </h2>
+
+                        <a href="schedules.html">
+                            View schedules
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+
+                    <div class="stat-icon schedule-icon">
+                        <i class="bi bi-calendar-check-fill"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- Passengers -->
+
+                <div class="stat-card">
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            TOTAL PASSENGERS
+                        </span>
+
+                        <h2 id="passengerCount">
+                            0
+                        </h2>
+
+                        <a href="passengers.html">
+                            View passengers
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+
+                    <div class="stat-icon passenger-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- Tickets -->
+
+                <div class="stat-card">
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            TOTAL TICKETS
+                        </span>
+
+                        <h2 id="ticketCount">
+                            0
+                        </h2>
+
+                        <a href="tickets.html">
+                            View tickets
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+
+                    <div class="stat-icon ticket-icon">
+                        <i class="bi bi-ticket-perforated-fill"></i>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= QUICK ACTIONS ================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="section-label">
+                            QUICK ACCESS
+                        </span>
+
+                        <h2>
+                            Management Modules
+                        </h2>
+                    </div>
+
+                    <span class="module-count">
+                        5 Modules
+                    </span>
+
+                </div>
+
+
+                <div class="modules-grid">
+
+
+                    <!-- Train -->
+
+                    <a href="trains.html" class="module-card">
+
+                        <div class="module-icon train-module">
+                            <i class="bi bi-train-front-fill"></i>
+                        </div>
+
+                        <div class="module-info">
+
+                            <h3>
+                                Train Management
+                            </h3>
+
+                            <p>
+                                Add, view, update and delete train details.
+                            </p>
+
+                            <span>
+                                Manage Trains
+                                <i class="bi bi-arrow-right"></i>
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- Station -->
+
+                    <a href="stations.html" class="module-card">
+
+                        <div class="module-icon station-module">
+                            <i class="bi bi-building-fill"></i>
+                        </div>
+
+                        <div class="module-info">
+
+                            <h3>
+                                Station Management
+                            </h3>
+
+                            <p>
+                                Manage railway station information.
+                            </p>
+
+                            <span>
+                                Manage Stations
+                                <i class="bi bi-arrow-right"></i>
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- Schedule -->
+
+                    <a href="schedules.html" class="module-card">
+
+                        <div class="module-icon schedule-module">
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+
+                        <div class="module-info">
+
+                            <h3>
+                                Schedule Management
+                            </h3>
+
+                            <p>
+                                Manage train routes and timings.
+                            </p>
+
+                            <span>
+                                Manage Schedules
+                                <i class="bi bi-arrow-right"></i>
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- Passenger -->
+
+                    <a href="passengers.html" class="module-card">
+
+                        <div class="module-icon passenger-module">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+
+                        <div class="module-info">
+
+                            <h3>
+                                Passenger Management
+                            </h3>
+
+                            <p>
+                                Add and manage passenger information.
+                            </p>
+
+                            <span>
+                                Manage Passengers
+                                <i class="bi bi-arrow-right"></i>
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- Ticket -->
+
+                    <a href="tickets.html" class="module-card">
+
+                        <div class="module-icon ticket-module">
+                            <i class="bi bi-ticket-perforated-fill"></i>
+                        </div>
+
+                        <div class="module-info">
+
+                            <h3>
+                                Ticket Management
+                            </h3>
+
+                            <p>
+                                Book, view and cancel train tickets.
+                            </p>
+
+                            <span>
+                                Manage Tickets
+                                <i class="bi bi-arrow-right"></i>
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= FOOTER INFO ================= -->
+
+            <footer class="dashboard-footer">
+
+                <span>
+                    <i class="bi bi-shield-check"></i>
+                    Train Management System
+                </span>
+
+                <span>
+                    Admin Panel
+                </span>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- Dashboard JavaScript -->
+
+    <script src="js/dashboard.js"></script>
+
+
+    <!-- Current Date -->
+
+    <script>
+
+        const dateElement =
+            document.getElementById("currentDate");
+
+        const today = new Date();
+
+        dateElement.textContent =
+            today.toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+    </script>
+
+</body>
+
+</html>

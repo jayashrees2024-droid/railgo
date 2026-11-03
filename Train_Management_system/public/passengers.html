@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Passengers | RailGo</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fa;
+            color: #1e293b;
+        }
+
+        .topbar {
+            height: 76px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 25px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            background: #2455df;
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 22px;
+        }
+
+        .brand h4 {
+            margin: 0;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .brand small {
+            color: #64748b;
+        }
+
+        .logout-btn {
+            background: white;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
+
+        .sidebar {
+            width: 235px;
+            flex-shrink: 0;
+            background: #111827;
+            padding: 25px 12px;
+        }
+
+        .menu-title {
+            color: #94a3b8;
+            font-size: 11px;
+            margin: 10px 10px 20px;
+        }
+
+        .nav-link {
+            color: #e2e8f0;
+            padding: 14px;
+            display: block;
+            text-decoration: none;
+            border-radius: 9px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .nav-link i {
+            margin-right: 12px;
+        }
+
+        .nav-link:hover {
+            background: #263449;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2455df;
+            color: white;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading small {
+            color: #2455df;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .page-heading h1 {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card, .panel {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 22px;
+            box-shadow: 0 4px 10px #00000008;
+        }
+
+        .stat-card small {
+            color: #64748b;
+        }
+
+        .stat-card h2 {
+            font-size: 27px;
+            font-weight: bold;
+            margin: 10px 0 0;
+            color: #111827;
+        }
+
+        .panel {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .panel-heading {
+            padding: 22px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .panel-heading h4 {
+            font-size: 20px;
+            margin: 0 0 6px;
+            font-weight: bold;
+        }
+
+        .panel-heading p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .search {
+            width: 280px;
+            max-width: 100%;
+        }
+
+        .search input {
+            padding: 10px;
+            border: 1px solid #d5dbe5;
+            border-radius: 6px;
+        }
+
+        .table-responsive {
+            width: 100%;
+        }
+
+        .table {
+            min-width: 900px;
+            margin: 0;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 15px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 16px 15px;
+            border-color: #e5e7eb;
+        }
+
+        .table tbody tr:hover td {
+            background: #f8fafc;
+        }
+
+        .footer {
+            margin-top: 22px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        @media (max-width: 800px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 10px;
+                overflow-x: auto;
+            }
+
+            .menu-title {
+                display: none;
+            }
+
+            .sidebar nav {
+                display: flex;
+                gap: 5px;
+                min-width: max-content;
+            }
+
+            .nav-link {
+                margin: 0;
+                padding: 12px;
+            }
+
+            .main {
+                padding: 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <a href="index.html" class="brand">
+        <div class="brand-icon">
+            <i class="bi bi-train-front-fill"></i>
+        </div>
+        <div>
+            <h4>Train Management</h4>
+            <small>Railway Administration System</small>
+        </div>
+    </a>
+
+    <div>
+        <strong style="margin-right:15px;">Admin</strong>
+        <button class="logout-btn" onclick="adminLogout()">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+    </div>
+</header>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="menu-title">MAIN MENU</div>
+
+        <nav>
+            <a href="admin-dashboard.html" class="nav-link">
+                <i class="bi bi-grid-1x2-fill"></i>Dashboard
+            </a>
+
+            <a href="trains.html" class="nav-link">
+                <i class="bi bi-train-front"></i>Trains
+            </a>
+
+            <a href="stations.html" class="nav-link">
+                <i class="bi bi-building"></i>Stations
+            </a>
+
+            <a href="schedules.html" class="nav-link">
+                <i class="bi bi-calendar-week"></i>Schedules
+            </a>
+
+            <a href="passengers.html" class="nav-link active">
+                <i class="bi bi-people-fill"></i>Passengers
+            </a>
+
+            <a href="tickets.html" class="nav-link">
+                <i class="bi bi-ticket-perforated"></i>Tickets
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main">
+
+        <div class="page-heading">
+            <small>PASSENGER MANAGEMENT</small>
+            <h1>Manage Passengers</h1>
+            <p>View passenger details and booking information.</p>
+        </div>
+
+        <section class="stats">
+            <div class="stat-card">
+                <small><i class="bi bi-ticket me-2"></i>Total Bookings</small>
+                <h2 id="totalBookings">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <small><i class="bi bi-people me-2"></i>Unique Passengers</small>
+                <h2 id="totalPassengers">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <small><i class="bi bi-train-front me-2"></i>Trains Booked</small>
+                <h2 id="totalTrains">0</h2>
+            </div>
+        </section>
+
+        <section class="panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h4>Passenger Bookings</h4>
+                    <p>Search and view passenger journey details.</p>
+                </div>
+
+                <div class="search">
+                    <input
+                        type="text"
+                        id="passengerSearch"
+                        class="form-control"
+                        placeholder="Search passengers or trains..."
+                        aria-label="Search passengers or trains">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Passenger</th>
+                            <th>Username</th>
+                            <th>Train No.</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Journey Date</th>
+                            <th>Seats</th>
+                            <th>Fare</th>
+                            <th>Booking Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="passengerTable">
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                Loading passenger bookings...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="padding:15px 22px;color:#64748b;font-size:12px;">
+                <span id="tableInfo">Passenger booking records</span>
+            </div>
+
+        </section>
+
+        <div class="footer">
+            © <span id="currentYear"></span> Train Management System
+        </div>
+
+    </main>
+</div>
+
+<script src="js/passengers.js"></script>
+
+<script>
+    document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+
+    function adminLogout() {
+        if (!confirm("Are you sure you want to logout?")) {
+            return;
+        }
+
+        localStorage.removeItem("admin");
+        localStorage.removeItem("adminToken");
+        sessionStorage.removeItem("admin");
+        sessionStorage.removeItem("adminToken");
+
+        window.location.href = "index.html";
+    }
+</script>
+
+</body>
+</html>

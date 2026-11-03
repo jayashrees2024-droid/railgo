@@ -1,0 +1,885 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNR Status | RailConnect</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #102f67;
+            --blue: #1769ff;
+            --text: #172033;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #06142e, #102f67, #173f7a);
+            font-family: 'Poppins', Arial, sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            padding: 25px 16px;
+        }
+
+        .main-container {
+            max-width: 1150px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 11px 20px;
+            background: var(--navy);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #dce8ff;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+        }
+
+        .dashboard-btn:hover {
+            background: var(--blue);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(23, 105, 255, 0.25);
+        }
+
+        .page-heading {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .heading-icon {
+            width: 65px;
+            height: 65px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 19px;
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: #ffffff;
+            font-size: 27px;
+            box-shadow: 0 9px 22px rgba(23, 105, 255, 0.25);
+        }
+
+        h1 {
+            font-size: clamp(27px, 4vw, 38px);
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: var(--navy);
+            letter-spacing: -1px;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .search-panel {
+            background: linear-gradient(135deg, #f6f9ff, #edf4ff);
+            border: 1px solid #dce8ff;
+            border-radius: 19px;
+            padding: 25px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 10px;
+        }
+
+        .form-control,
+        .form-select {
+            font-size: 15px;
+            padding: 13px 15px;
+            border: 1px solid #d7dfeb;
+            border-radius: 10px;
+            color: var(--text);
+            background-color: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 4px rgba(23, 105, 255, 0.12);
+        }
+
+        .input-group .form-control {
+            border-radius: 10px 0 0 10px;
+            min-width: 0;
+        }
+
+        .input-group .btn {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .btn {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            border: none;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0b2450, #1258df);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(23, 105, 255, 0.22);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: #b91c2c;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(220, 53, 69, 0.2);
+        }
+
+        .ticket-card {
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 28px;
+            background: #ffffff;
+            box-shadow: 0 8px 28px rgba(15, 23, 42, 0.05);
+        }
+
+        .ticket-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 25px;
+        }
+
+        .ticket-heading i {
+            color: var(--blue);
+        }
+
+        .pnr-panel {
+            background: linear-gradient(135deg, #edf4ff, #f6f9ff);
+            border: 1px solid #dce8ff;
+            padding: 22px;
+            border-radius: 15px;
+            height: 100%;
+        }
+
+        .pnr-label {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 7px;
+        }
+
+        .pnr-number {
+            font-size: clamp(25px, 4vw, 35px);
+            font-weight: 800;
+            color: var(--blue);
+            overflow-wrap: anywhere;
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .status-confirmed {
+            color: #146c43;
+            background: #d9f7e8;
+            border: 1px solid #b8ebd1;
+        }
+
+        .status-cancelled {
+            color: #842029;
+            background: #ffe1e4;
+            border: 1px solid #ffc5cb;
+        }
+
+        .detail-box {
+            background: #ffffff;
+            border: 1px solid #e8edf5;
+            border-radius: 12px;
+            padding: 17px;
+            height: 100%;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-box:hover {
+            transform: translateY(-2px);
+            border-color: #c8d9ff;
+            box-shadow: 0 6px 18px rgba(16, 47, 103, 0.06);
+        }
+
+        .detail strong {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .detail strong i {
+            width: 19px;
+            color: var(--blue);
+            margin-right: 5px;
+        }
+
+        .detail span {
+            color: #1e293b;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .section-divider {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 28px 0;
+            opacity: 1;
+        }
+
+        .cancel-heading {
+            font-size: 20px;
+            font-weight: 700;
+            color: #b42332;
+            margin-bottom: 8px;
+        }
+
+        .cancel-description {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        #message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .message-success {
+            display: block !important;
+            background: #d9f7e8;
+            color: #146c43;
+            border: 1px solid #b8ebd1;
+        }
+
+        .message-error {
+            display: block !important;
+            background: #ffe1e4;
+            color: #842029;
+            border: 1px solid #ffc5cb;
+        }
+
+        #ticketSection {
+            display: none;
+        }
+
+        #cancelledDetails {
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        #cancelledDetails h5 {
+            font-weight: 700;
+            margin-bottom: 17px;
+        }
+
+        #cancelledDetails p {
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .help-note {
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .help-note i {
+            color: var(--blue);
+            margin-right: 5px;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid rgba(23, 105, 255, 0.4);
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px 10px;
+            }
+
+            .main-container {
+                padding: 22px 17px;
+                border-radius: 18px;
+            }
+
+            .page-heading {
+                gap: 13px;
+                margin-bottom: 23px;
+            }
+
+            .heading-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 15px;
+                font-size: 22px;
+            }
+
+            .page-subtitle {
+                font-size: 12px;
+            }
+
+            .search-panel {
+                padding: 18px;
+            }
+
+            .input-group {
+                flex-wrap: wrap;
+                gap: 9px;
+            }
+
+            .input-group .form-control,
+            .input-group .btn {
+                border-radius: 10px;
+                width: 100%;
+            }
+
+            .ticket-card {
+                padding: 20px 15px;
+            }
+
+            .ticket-heading {
+                font-size: 19px;
+            }
+
+            .detail-box {
+                padding: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <!-- Dashboard button at the top-right -->
+    <div class="top-bar">
+        <a href="user-dashboard.html" class="dashboard-btn">
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+        </a>
+    </div>
+
+    <div class="page-heading">
+        <div class="heading-icon">
+            <i class="fa-solid fa-ticket"></i>
+        </div>
+
+        <div>
+            <h1>PNR Status</h1>
+            <p class="page-subtitle">
+                Check your booking details and manage your train ticket.
+            </p>
+        </div>
+    </div>
+
+    <!-- PNR search -->
+    <div class="search-panel">
+        <form id="pnrForm">
+            <label for="pnrInput" class="form-label">
+                <i class="fa-solid fa-magnifying-glass me-2"></i>
+                Enter PNR Number
+            </label>
+
+            <div class="input-group">
+                <input type="text"
+                       id="pnrInput"
+                       class="form-control"
+                       placeholder="Enter your PNR number"
+                       autocomplete="off"
+                       required>
+
+                <button type="submit" class="btn btn-primary" id="checkButton">
+                    <i class="fa-solid fa-search me-2"></i>Check Status
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div id="message" role="status" aria-live="polite"></div>
+
+    <!-- Ticket information -->
+    <section id="ticketSection">
+        <div class="ticket-card">
+
+            <h3 class="ticket-heading">
+                <i class="fa-solid fa-receipt"></i>
+                Ticket Details
+            </h3>
+
+            <div class="row g-3 align-items-stretch mb-4">
+                <div class="col-md-7">
+                    <div class="pnr-panel">
+                        <div class="pnr-label">PNR Number</div>
+                        <div class="pnr-number" id="ticketPnr"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="pnr-panel d-flex flex-column justify-content-center">
+                        <div class="pnr-label">Booking Status</div>
+                        <div>
+                            <span id="ticketStatus" class="status-badge"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-solid fa-user"></i>Passenger Name</strong>
+                        <span id="passengerName">-</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-solid fa-at"></i>Username</strong>
+                        <span id="username">-</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-solid fa-train"></i>Train Name</strong>
+                        <span id="trainName">-</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-solid fa-hashtag"></i>Train Number</strong>
+                        <span id="trainNumber">-</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-solid fa-location-dot"></i>Source</strong>
+                        <span id="source">-</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-solid fa-location-arrow"></i>Destination</strong>
+                        <span id="destination">-</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-regular fa-calendar"></i>Journey Date</strong>
+                        <span id="journeyDate">-</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-solid fa-chair"></i>Seats Booked</strong>
+                        <span id="seats">-</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 detail">
+                    <div class="detail-box">
+                        <strong><i class="fa-solid fa-indian-rupee-sign"></i>Fare</strong>
+                        ₹<span id="fare">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cancellation details -->
+            <div id="cancelledDetails" class="alert alert-danger mt-4"
+                 style="display:none;">
+
+                <h5>
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+                    Ticket Cancellation Details
+                </h5>
+
+                <p><strong>Reason:</strong>
+                    <span id="savedReason">-</span>
+                </p>
+
+                <p><strong>Cancelled At:</strong>
+                    <span id="cancelledAt">-</span>
+                </p>
+
+                <p><strong>Cancellation Fee:</strong>
+                    ₹<span id="cancellationFee">0</span>
+                </p>
+
+                <p class="mb-0"><strong>Refund Amount:</strong>
+                    ₹<span id="refundAmount">0</span>
+                </p>
+            </div>
+
+            <!-- Cancel ticket -->
+            <div id="cancelSection" class="mt-4">
+                <hr class="section-divider">
+
+                <h4 class="cancel-heading">
+                    <i class="fa-solid fa-ban me-2"></i>
+                    Cancel Ticket
+                </h4>
+
+                <p class="cancel-description">
+                    Enter the reason for cancellation and confirm.
+                </p>
+
+                <form id="cancelForm">
+                    <div class="mb-3">
+                        <label for="cancellationReason" class="form-label">
+                            Cancellation Reason
+                        </label>
+
+                        <select id="cancellationReason"
+                                class="form-select"
+                                required>
+                            <option value="">Select a reason</option>
+                            <option value="Change of travel plan">
+                                Change of travel plan
+                            </option>
+                            <option value="Personal reasons">
+                                Personal reasons
+                            </option>
+                            <option value="Wrong booking details">
+                                Wrong booking details
+                            </option>
+                            <option value="Travel no longer required">
+                                Travel no longer required
+                            </option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="otherReasonSection"
+                         style="display:none;">
+                        <label for="otherReason" class="form-label">
+                            Enter your reason
+                        </label>
+
+                        <textarea id="otherReason"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Type your reason"></textarea>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-danger"
+                            id="cancelButton">
+                        <i class="fa-solid fa-ban me-2"></i>
+                        Cancel Ticket
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="help-note">
+        <i class="fa-solid fa-shield-halved"></i>
+        Your ticket information is retrieved from your RailConnect booking record.
+    </div>
+</div>
+
+<script>
+    let currentTicket = null;
+
+    const pnrForm = document.getElementById("pnrForm");
+    const cancelForm = document.getElementById("cancelForm");
+    const messageBox = document.getElementById("message");
+    const ticketSection = document.getElementById("ticketSection");
+    const cancelSection = document.getElementById("cancelSection");
+    const reasonSelect = document.getElementById("cancellationReason");
+    const otherReasonSection = document.getElementById("otherReasonSection");
+    const otherReasonInput = document.getElementById("otherReason");
+
+    function showMessage(message, success) {
+        messageBox.textContent = message;
+        messageBox.className = success ? "message-success" : "message-error";
+    }
+
+    function hideMessage() {
+        messageBox.textContent = "";
+        messageBox.className = "";
+        messageBox.style.display = "none";
+    }
+
+    async function requestJSON(url, options = {}) {
+        const response = await fetch(url, options);
+
+        let data;
+
+        try {
+            data = await response.json();
+        } catch (error) {
+            throw new Error("The server returned an invalid response.");
+        }
+
+        if (!response.ok || data.success === false) {
+            throw new Error(data.message || "Request failed.");
+        }
+
+        return data;
+    }
+
+    function displayValue(id, value) {
+        document.getElementById(id).textContent =
+            value === undefined || value === null || value === ""
+                ? "-"
+                : value;
+    }
+
+    function renderTicket(ticket) {
+        currentTicket = ticket;
+
+        ticketSection.style.display = "block";
+
+        displayValue("ticketPnr", ticket.pnr);
+        displayValue("passengerName", ticket.passengerName);
+        displayValue("username", ticket.username);
+        displayValue("trainName", ticket.trainName);
+        displayValue("trainNumber", ticket.trainNumber);
+        displayValue("source", ticket.source);
+        displayValue("destination", ticket.destination);
+        displayValue("journeyDate", ticket.journeyDate);
+        displayValue("seats", ticket.seats);
+        displayValue("fare", ticket.fare);
+
+        const status = String(ticket.status || "Confirmed");
+        const statusElement = document.getElementById("ticketStatus");
+
+        statusElement.textContent = status.toUpperCase();
+        statusElement.className = "status-badge " +
+            (status.toLowerCase() === "cancelled"
+                ? "status-cancelled"
+                : "status-confirmed");
+
+        if (status.toLowerCase() === "cancelled") {
+            cancelSection.style.display = "none";
+            document.getElementById("cancelledDetails").style.display = "block";
+
+            displayValue("savedReason", ticket.cancellationReason);
+            displayValue("cancelledAt", ticket.cancelledAt);
+            displayValue("cancellationFee", ticket.cancellationFee);
+            displayValue("refundAmount", ticket.refundAmount);
+        } else {
+            cancelSection.style.display = "block";
+            document.getElementById("cancelledDetails").style.display = "none";
+        }
+    }
+
+    async function checkPNR(pnr) {
+        hideMessage();
+        ticketSection.style.display = "none";
+
+        try {
+            const data = await requestJSON(
+                "/api/users/pnr/" + encodeURIComponent(pnr)
+            );
+
+            const ticket = data.ticket || data;
+
+            if (!ticket || !ticket.pnr) {
+                throw new Error("Ticket details were not found.");
+            }
+
+            renderTicket(ticket);
+            showMessage("Ticket record found.", true);
+        } catch (error) {
+            currentTicket = null;
+            showMessage(error.message, false);
+        }
+    }
+
+    pnrForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const pnr = document.getElementById("pnrInput").value.trim();
+
+        if (!pnr) {
+            showMessage("Please enter a PNR number.", false);
+            return;
+        }
+
+        await checkPNR(pnr);
+    });
+
+    reasonSelect.addEventListener("change", function() {
+        const isOther = reasonSelect.value === "Other";
+
+        otherReasonSection.style.display = isOther ? "block" : "none";
+        otherReasonInput.required = isOther;
+    });
+
+    cancelForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        if (!currentTicket || !currentTicket.pnr) {
+            showMessage("Please check the PNR first.", false);
+            return;
+        }
+
+        if (String(currentTicket.status).toLowerCase() === "cancelled") {
+            showMessage("This ticket is already cancelled.", false);
+            return;
+        }
+
+        let reason = reasonSelect.value;
+
+        if (!reason) {
+            showMessage("Please select a cancellation reason.", false);
+            return;
+        }
+
+        if (reason === "Other") {
+            reason = otherReasonInput.value.trim();
+
+            if (!reason) {
+                showMessage("Please enter your cancellation reason.", false);
+                return;
+            }
+        }
+
+        const pnr = currentTicket.pnr;
+
+        if (!confirm("Are you sure you want to cancel this ticket?")) {
+            return;
+        }
+
+        const button = document.getElementById("cancelButton");
+        button.disabled = true;
+        button.textContent = "Cancelling...";
+
+        try {
+            const data = await requestJSON(
+                "/api/users/cancel-ticket/" + encodeURIComponent(pnr),
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ reason: reason })
+                }
+            );
+
+            // Reload the ticket to display the latest database status.
+            await checkPNR(pnr);
+
+            if (currentTicket &&
+                String(currentTicket.status).toLowerCase() === "cancelled") {
+                showMessage(
+                    data.message || "Ticket cancelled successfully.",
+                    true
+                );
+            } else {
+                showMessage(
+                    "The server responded, but the ticket status has not changed. Check the backend route.",
+                    false
+                );
+            }
+        } catch (error) {
+            showMessage(error.message, false);
+        } finally {
+            button.disabled = false;
+            button.innerHTML =
+                '<i class="fa-solid fa-ban me-2"></i>Cancel Ticket';
+        }
+    });
+
+    // Automatically load a PNR supplied in the URL.
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialPnr = urlParams.get("pnr");
+
+    if (initialPnr) {
+        document.getElementById("pnrInput").value = initialPnr;
+        checkPNR(initialPnr);
+    }
+</script>
+
+</body>
+</html>

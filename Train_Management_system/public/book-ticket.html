@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailGo | Book Train Ticket</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5fb;
+            color: #172033;
+        }
+
+        .navbar {
+            background: #172554;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-weight: bold;
+        }
+
+        .page-title {
+            color: #172554;
+            font-weight: bold;
+        }
+
+        .panel, .train-card {
+            background: white;
+            border-radius: 15px;
+            padding: 24px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.06);
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .train-card h5 {
+            color: #172554;
+            font-weight: bold;
+        }
+
+        .fare {
+            color: #15803d;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .payment-option {
+            display: block;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            height: 100%;
+            transition: .2s;
+        }
+
+        .payment-option:hover {
+            border-color: #2563eb;
+            background: #f8faff;
+        }
+
+        .payment-option:has(input:checked) {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .payment-option input {
+            margin-right: 8px;
+        }
+
+        .payment-icon {
+            font-size: 25px;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .payment-summary {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        #message {
+            white-space: pre-line;
+        }
+
+        .demo-label {
+            font-size: 12px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 576px) {
+            .panel, .train-card {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="user-dashboard.html">
+            🚆 RailGo
+        </a>
+        <a href="user-dashboard.html" class="btn btn-outline-light btn-sm">
+            Dashboard
+        </a>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <h2 class="page-title mb-4">
+        <i class="fa-solid fa-ticket me-2"></i>Book Your Train Ticket
+    </h2>
+
+    <div id="message" class="alert d-none" role="status" aria-live="polite"></div>
+
+    <!-- TRAIN SEARCH -->
+    <div class="panel">
+        <h5 class="mb-3">Search for a Train</h5>
+
+        <form id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="source">From</label>
+                    <input class="form-control" id="source"
+                           placeholder="e.g. Vellore" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="destination">To</label>
+                    <input class="form-control" id="destination"
+                           placeholder="e.g. Chennai" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="journeyDate">Journey Date</label>
+                    <input type="date" class="form-control"
+                           id="journeyDate" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="seats">Number of Seats</label>
+                    <input type="number" class="form-control"
+                           id="seats" min="1" value="1" required>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary w-100"
+                            id="searchButton">
+                        <i class="fa-solid fa-magnifying-glass me-2"></i>
+                        Search Trains
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="trainResults"></div>
+
+    <!-- PASSENGER DETAILS AND PAYMENT -->
+    <div class="panel d-none" id="bookingPanel">
+        <h5 class="mb-3">
+            <i class="fa-solid fa-user me-2 text-primary"></i>
+            Passenger Details
+        </h5>
+
+        <p id="selectedTrain" class="text-secondary"></p>
+
+        <form id="bookingForm">
+            <div class="mb-3">
+                <label class="form-label" for="username">Username</label>
+                <input class="form-control" id="username"
+                       placeholder="Your registered username" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="passengerName">
+                    Passenger Name
+                </label>
+                <input class="form-control" id="passengerName"
+                       placeholder="Enter passenger name"
+                       maxlength="100" required>
+            </div>
+
+            <hr class="my-4">
+
+            <h5 class="mb-3">
+                <i class="fa-solid fa-credit-card me-2 text-primary"></i>
+                Payment Method
+                <span class="demo-label ms-2">DEMO ONLY</span>
+            </h5>
+
+            <p class="text-secondary small">
+                Select a simulated payment method. No real money will be
+                transferred. Do not enter real banking credentials.
+            </p>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod"
+                               value="UPI_DEMO" required>
+                        <div class="payment-icon">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <strong>UPI Demo</strong>
+                        <div class="small text-secondary mt-1">
+                            Simulated UPI payment
+                        </div>
+                    </label>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod"
+                               value="CARD_DEMO" required>
+                        <div class="payment-icon">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <strong>Card Demo</strong>
+                        <div class="small text-secondary mt-1">
+                            Simulated card payment
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="payment-summary mb-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Train</span>
+                    <strong id="summaryTrain">-</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Number of seats</span>
+                    <strong id="summarySeats">-</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Fare per seat</span>
+                    <strong id="summaryPerSeat">₹0</strong>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Total Amount</span>
+                    <span class="fare" id="totalFare">₹0</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100"
+                    id="bookButton">
+                <i class="fa-solid fa-lock me-2"></i>
+                Pay &amp; Book Ticket
+            </button>
+
+            <div class="text-secondary small text-center mt-3">
+                <i class="fa-solid fa-shield-halved me-1"></i>
+                Simulated payment for project demonstration only.
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const searchForm = document.getElementById("searchForm");
+    const bookingForm = document.getElementById("bookingForm");
+    const results = document.getElementById("trainResults");
+    const bookingPanel = document.getElementById("bookingPanel");
+    const message = document.getElementById("message");
+    const bookButton = document.getElementById("bookButton");
+
+    let selectedTrain = null;
+    let paymentInProgress = false;
+
+    function showMessage(text, type) {
+        message.className = "alert alert-" + type;
+        message.textContent = text;
+        message.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function hideMessage() {
+        message.className = "alert d-none";
+        message.textContent = "";
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, function (char) {
+            return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            }[char];
+        });
+    }
+
+    function getSeatCount() {
+        return Number(document.getElementById("seats").value);
+    }
+
+    function getTotalFare() {
+        if (!selectedTrain) return 0;
+
+        const fare = Number(selectedTrain.fare);
+        const seats = getSeatCount();
+
+        if (!Number.isFinite(fare) || fare < 0 ||
+            !Number.isInteger(seats) || seats < 1) {
+            return NaN;
+        }
+
+        return fare * seats;
+    }
+
+    function updatePaymentSummary() {
+        if (!selectedTrain) return;
+
+        const seats = getSeatCount();
+        const fare = Number(selectedTrain.fare);
+        const total = getTotalFare();
+
+        document.getElementById("summaryTrain").textContent =
+            selectedTrain.trainName + " (" + selectedTrain.trainNumber + ")";
+
+        document.getElementById("summarySeats").textContent =
+            Number.isInteger(seats) && seats > 0 ? seats : "-";
+
+        document.getElementById("summaryPerSeat").textContent =
+            Number.isFinite(fare) && fare >= 0 ? "₹" + fare : "Unavailable";
+
+        document.getElementById("totalFare").textContent =
+            Number.isFinite(total) && total >= 0 ? "₹" + total : "Unavailable";
+    }
+
+    // SEARCH TRAINS
+    searchForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        hideMessage();
+        results.innerHTML = "";
+        bookingPanel.classList.add("d-none");
+        selectedTrain = null;
+
+        const source = document.getElementById("source").value.trim();
+        const destination = document.getElementById("destination").value.trim();
+        const journeyDate = document.getElementById("journeyDate").value;
+        const seats = getSeatCount();
+
+        if (source.toLowerCase() === destination.toLowerCase()) {
+            showMessage("Source and destination must be different.", "warning");
+            return;
+        }
+
+        if (!journeyDate || journeyDate < localToday()) {
+            showMessage("Select today or a future journey date.", "warning");
+            return;
+        }
+
+        if (!Number.isInteger(seats) || seats < 1) {
+            showMessage("Enter a valid number of seats.", "warning");
+            return;
+        }
+
+        results.innerHTML = "<p>Searching trains...</p>";
+
+        try {
+            const params = new URLSearchParams({
+                source: source,
+                destination: destination,
+                journeyDate: journeyDate,
+                seats: String(seats)
+            });
+
+            const response = await fetch(
+                "/api/users/search-trains?" + params
+            );
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Unable to search trains.");
+            }
+
+            results.innerHTML = "";
+
+            if (!data.trains || data.trains.length === 0) {
+                showMessage("No trains available for this route.", "warning");
+                return;
+            }
+
+            let foundAvailableTrain = false;
+
+            data.trains.forEach(function (train) {
+                const availableSeats = Number(train.availableSeats);
+                const fare = Number(train.fare);
+
+                const canBook =
+                    Number.isFinite(availableSeats) &&
+                    availableSeats >= seats &&
+                    Number.isFinite(fare) &&
+                    fare >= 0;
+
+                if (canBook) foundAvailableTrain = true;
+
+                const card = document.createElement("div");
+                card.className = "train-card";
+
+                card.innerHTML = `
+                    <h5>${escapeHtml(train.trainName)}
+                        (${escapeHtml(train.trainNumber)})</h5>
+
+                    <p><strong>Route:</strong>
+                        ${escapeHtml(train.source)} →
+                        ${escapeHtml(train.destination)}</p>
+
+                    <p><strong>Departure:</strong>
+                        ${escapeHtml(train.departureTime)}</p>
+
+                    <p><strong>Arrival:</strong>
+                        ${escapeHtml(train.arrivalTime)}</p>
+
+                    <p><strong>Journey date:</strong>
+                        ${escapeHtml(journeyDate)}</p>
+
+                    <p><strong>Available seats:</strong>
+                        ${Number.isFinite(availableSeats)
+                            ? availableSeats : "Unknown"}</p>
+
+                    <p class="fare">Fare per seat:
+                        ${Number.isFinite(fare) ? "₹" + fare : "Unknown"}</p>
+
+                    <p class="${canBook ? "text-success" : "text-danger"}">
+                        ${canBook
+                            ? "Seats available"
+                            : "Not available for your seat count"}
+                    </p>
+
+                    <button type="button"
+                        class="btn ${canBook ? "btn-primary" : "btn-secondary"}"
+                        ${canBook ? "" : "disabled"}>
+                        ${canBook ? "Book This Train" : "Not Available"}
+                    </button>
+                `;
+
+                const button = card.querySelector("button");
+
+                if (canBook) {
+                    button.addEventListener("click", function () {
+                        selectedTrain = train;
+
+                        document.getElementById("selectedTrain").textContent =
+                            train.trainName + " (" + train.trainNumber + ") — " +
+                            train.source + " to " + train.destination;
+
+                        updatePaymentSummary();
+
+                        bookingPanel.classList.remove("d-none");
+                        bookingPanel.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+                        hideMessage();
+                    });
+                }
+
+                results.appendChild(card);
+            });
+
+            if (!foundAvailableTrain) {
+                showMessage(
+                    "No train has enough seats for your selection.",
+                    "warning"
+                );
+            }
+        } catch (error) {
+            results.innerHTML = "";
+            showMessage(error.message || "Unable to search trains.", "danger");
+        }
+    });
+
+    // Keep displayed amount updated when the seat count changes.
+    document.getElementById("seats").addEventListener("change", function () {
+        if (selectedTrain) {
+            selectedTrain = null;
+            bookingPanel.classList.add("d-none");
+            showMessage(
+                "Seat count changed. Search trains again to refresh availability.",
+                "info"
+            );
+        }
+    });
+
+    // PAYMENT AND BOOKING
+    bookingForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        if (paymentInProgress) return;
+
+        hideMessage();
+
+        if (!selectedTrain) {
+            showMessage(
+                "Please search for and select an available train first.",
+                "warning"
+            );
+            return;
+        }
+
+        const username = document.getElementById("username").value.trim();
+        const passengerName =
+            document.getElementById("passengerName").value.trim();
+        const journeyDate = document.getElementById("journeyDate").value;
+        const seats = getSeatCount();
+        const totalFare = getTotalFare();
+
+        const paymentOption = document.querySelector(
+            'input[name="paymentMethod"]:checked'
+        );
+
+        if (!username || !passengerName) {
+            showMessage("Enter the username and passenger name.", "warning");
+            return;
+        }
+
+        if (!Number.isInteger(seats) || seats < 1 ||
+            !Number.isFinite(totalFare) || totalFare < 0) {
+            showMessage("Invalid seat count or fare.", "warning");
+            return;
+        }
+
+        if (!paymentOption) {
+            showMessage("Select a demo payment method.", "warning");
+            return;
+        }
+
+        if (journeyDate < localToday()) {
+            showMessage("The journey date cannot be in the past.", "warning");
+            return;
+        }
+
+        const method = paymentOption.value;
+
+        const confirmed = confirm(
+            "DEMO PAYMENT\n\n" +
+            "Train: " + selectedTrain.trainName + "\n" +
+            "Passenger: " + passengerName + "\n" +
+            "Seats: " + seats + "\n" +
+            "Amount: ₹" + totalFare + "\n" +
+            "Method: " + method.replace("_", " ") + "\n\n" +
+            "This is a simulation. No real payment will occur.\n\n" +
+            "Continue to the booking server?"
+        );
+
+        if (!confirmed) return;
+
+        paymentInProgress = true;
+        bookButton.disabled = true;
+        bookButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin me-2"></i>Processing...';
+
+        try {
+            /*
+             * IMPORTANT:
+             * This calls your EXISTING user booking endpoint.
+             * Payment fields are included for the backend to save.
+             * This browser-side demo is not a secure payment gateway.
+             */
+            const response = await fetch("/api/users/book-ticket", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    passengerName: passengerName,
+                    trainNumber: selectedTrain.trainNumber,
+                    source: selectedTrain.source,
+                    destination: selectedTrain.destination,
+                    journeyDate: journeyDate,
+                    seats: seats,
+                    paymentMethod: method,
+                    paymentStatus: "Paid",
+                    paymentType: "DEMO",
+                    paymentAmount: totalFare
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Ticket booking failed.");
+            }
+
+            showMessage(
+                "Demo payment and ticket booking request completed!\n" +
+                "PNR: " + (data.pnr || "Not provided") +
+                "\nAmount: ₹" + totalFare +
+                "\nPayment method: " + method.replace("_", " ") +
+                "\n\nPlease verify the payment status in your saved ticket.",
+                "success"
+            );
+
+            if (data.pnr) {
+                window.location.href =
+                    "pnr-status.html?pnr=" + encodeURIComponent(data.pnr);
+            }
+        } catch (error) {
+            showMessage(
+                error.message ||
+                "Unable to complete booking. Check that the server is running.",
+                "danger"
+            );
+        } finally {
+            paymentInProgress = false;
+            bookButton.disabled = false;
+            bookButton.innerHTML =
+                '<i class="fa-solid fa-lock me-2"></i>Pay &amp; Book Ticket';
+        }
+    });
+
+    function localToday() {
+        const date = new Date();
+        return new Date(
+            date.getTime() - date.getTimezoneOffset() * 60000
+        ).toISOString().split("T")[0];
+    }
+
+    document.getElementById("journeyDate").min = localToday();
+    document.getElementById("journeyDate").value = localToday();
+</script>
+</body>
+</html>

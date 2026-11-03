@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RailGo | Admin Login</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+      font-family: 'Poppins', sans-serif;
+      background: #f4f7fc;
+      color: #183153;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 1000px;
+      min-height: 590px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #fff;
+      border: 1px solid #e5edf8;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 45px rgba(23, 56, 103, 0.13);
+      animation: appear 0.6s ease;
+    }
+
+    /* WELCOME PANEL WITH TRAIN IMAGE */
+    .welcome-panel {
+      position: relative;
+      isolation: isolate;
+      color: white;
+      padding: 42px 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #102f67;
+      overflow: hidden;
+    }
+
+    .welcome-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background-image: url("https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1400&q=85");
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.02);
+    }
+
+    .welcome-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        160deg,
+        rgba(16, 47, 103, 0.94),
+        rgba(16, 47, 103, 0.76),
+        rgba(20, 117, 255, 0.48)
+      );
+    }
+
+    .brand {
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .brand i {
+      color: #67c7ff;
+      margin-right: 8px;
+    }
+
+    .brand-subtitle {
+      margin-left: 37px;
+      font-size: 10px;
+      font-weight: 400;
+      color: #d9eaff;
+    }
+
+    .welcome-panel h1 {
+      font-size: clamp(30px, 4vw, 43px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+
+    .welcome-panel h1 span {
+      color: #67c7ff;
+    }
+
+    .welcome-panel p {
+      color: #edf5ff;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .feature {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 17px;
+      color: #f1f7ff;
+      font-size: 12px;
+    }
+
+    .feature i {
+      color: #67c7ff;
+      font-size: 17px;
+    }
+
+    .welcome-footer {
+      font-size: 11px;
+      color: #d9eaff;
+    }
+
+    /* LOGIN PANEL */
+    .login-panel {
+      padding: 45px 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 17px;
+      background: #e4efff;
+      color: #1475ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      margin-bottom: 22px;
+    }
+
+    .login-panel h2 {
+      font-size: 29px;
+      font-weight: 800;
+      color: #12346c;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #7284a2;
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 13px;
+      color: #183153;
+      margin-bottom: 8px;
+    }
+
+    .input-group {
+      border: 1px solid #dce5f2;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: 0.2s;
+    }
+
+    .input-group:focus-within {
+      border-color: #1475ff;
+      box-shadow: 0 0 0 3px rgba(20, 117, 255, 0.12);
+    }
+
+    .input-group-text {
+      border: 0;
+      background: #f4f7fc;
+      color: #51688d;
+      padding: 0 15px;
+    }
+
+    .form-control {
+      min-height: 48px;
+      border: 0;
+      padding: 12px;
+      font-size: 13px;
+      box-shadow: none !important;
+    }
+
+    .password-toggle {
+      border: 0;
+      background: white;
+      color: #64748b;
+      padding: 0 14px;
+    }
+
+    .password-toggle:hover {
+      color: #1475ff;
+    }
+
+    .login-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 8px;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      background: #1475ff;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .login-btn:hover {
+      background: #0059d6;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(20, 117, 255, 0.22);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.7;
+      cursor: wait;
+      transform: none;
+    }
+
+    .small-link {
+      color: #1475ff;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .small-link:hover {
+      color: #0059d6;
+      text-decoration: underline;
+    }
+
+    #message {
+      display: none;
+      font-size: 12px;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
+      overflow-wrap: anywhere;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #7284a2;
+      font-size: 11px;
+      margin-top: 27px;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 15px;
+      }
+
+      .login-wrapper {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+      }
+
+      .welcome-panel {
+        padding: 27px;
+        min-height: 270px;
+      }
+
+      .welcome-panel h1 {
+        font-size: 30px;
+        margin-top: 25px;
+      }
+
+      .welcome-panel .features {
+        display: none;
+      }
+
+      .login-panel {
+        padding: 32px 25px;
+      }
+
+      .login-panel h2 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="login-wrapper">
+
+    <section class="welcome-panel">
+      <div>
+        <div class="brand">
+          <i class="fa-solid fa-train-subway"></i> RailGo
+        </div>
+        <div class="brand-subtitle">Train Management System</div>
+      </div>
+
+      <div>
+        <h1>Manage journeys.<br>Move <span>people.</span></h1>
+
+        <p>
+          Welcome to your railway management workspace.
+          Sign in to manage trains, schedules, stations and tickets.
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Train and schedule management</span>
+          </div>
+          <div class="feature">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Passenger and ticket management</span>
+          </div>
+          <div class="feature">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Centralized admin dashboard</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="welcome-footer">
+        <i class="fa-solid fa-train-subway me-2"></i>
+        RailGo Railway Management System
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-icon">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+
+      <h2>Admin Login</h2>
+      <p class="subtitle">
+        Enter your administrator credentials to continue.
+      </p>
+
+      <div id="message" role="alert" aria-live="polite"></div>
+
+      <form id="loginForm">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa-solid fa-user"></i>
+            </span>
+
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              placeholder="Enter admin username"
+              autocomplete="username"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            >
+
+            <button
+              class="password-toggle"
+              type="button"
+              id="togglePassword"
+              aria-label="Show password"
+            >
+              <i class="fa-solid fa-eye" id="eyeIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="text-end mb-3">
+          <a href="forgot-username.html" class="small-link me-3">
+            Forgot username?
+          </a>
+
+          <a href="forgot-password.html" class="small-link">
+            Forgot password?
+          </a>
+        </div>
+
+        <button type="submit" class="login-btn" id="loginButton">
+          <i class="fa-solid fa-right-to-bracket me-2"></i>
+          Sign In
+        </button>
+      </form>
+
+      <div class="footer-note">
+        <a href="index.html" class="small-link">Back to Main Page</a>
+        <div class="mt-2">Secure administrator access · RailGo</div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    var form = document.getElementById("loginForm");
+    var message = document.getElementById("message");
+    var button = document.getElementById("loginButton");
+    var passwordInput = document.getElementById("password");
+
+    function showMessage(text, success) {
+      message.textContent = text;
+      message.style.display = "block";
+      message.className = success
+        ? "alert alert-success"
+        : "alert alert-danger";
+    }
+
+    document.getElementById("togglePassword").addEventListener("click", function () {
+      var icon = document.getElementById("eyeIcon");
+      var showing = passwordInput.type === "text";
+
+      passwordInput.type = showing ? "password" : "text";
+
+      icon.className = showing
+        ? "fa-solid fa-eye"
+        : "fa-solid fa-eye-slash";
+
+      this.setAttribute(
+        "aria-label",
+        showing ? "Show password" : "Hide password"
+      );
+    });
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      message.style.display = "none";
+      button.disabled = true;
+      button.innerHTML =
+        '<span class="spinner-border spinner-border-sm me-2"></span>Signing in...';
+
+      var username = document.getElementById("username").value.trim();
+      var password = passwordInput.value;
+
+      try {
+        var response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || data.success === false) {
+          showMessage(
+            data.message || "Login failed. Check your username and password.",
+            false
+          );
+          return;
+        }
+
+        showMessage("Login successful! Opening dashboard...", true);
+
+        window.location.href = "dashboard.html";
+
+      } catch (error) {
+        showMessage(
+          "Cannot connect to the server. Make sure server.js and MongoDB are running.",
+          false
+        );
+      } finally {
+        button.disabled = false;
+        button.innerHTML =
+          '<i class="fa-solid fa-right-to-bracket me-2"></i>Sign In';
+      }
+    });
+  </script>
+</body>
+</html>

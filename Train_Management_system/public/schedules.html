@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Train Management System - Schedules</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            background-color: #f3f6fb;
+        }
+
+        .schedule-search {
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .schedule-card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        .schedule-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .schedule-table th {
+            white-space: nowrap;
+            background: #f2f5fb;
+        }
+
+        .schedule-table td {
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 650px) {
+            .schedule-list-heading {
+                align-items: stretch !important;
+            }
+
+            .schedule-search {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="top-header">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="bi bi-train-front-fill"></i>
+            </div>
+
+            <div>
+                <h2>Train Management</h2>
+                <span>Railway Administration System</span>
+            </div>
+        </div>
+
+        <div class="admin-area">
+            <div class="admin-info">
+                <div class="admin-icon">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+                    <strong>Admin</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+
+            <a href="index.html" class="logout-btn">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+        </div>
+    </header>
+
+
+    <!-- MAIN LAYOUT -->
+    <div class="page-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                <span>MAIN MENU</span>
+            </div>
+
+            <nav>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="trains.html" class="nav-item">
+                    <i class="bi bi-train-front"></i>
+                    <span>Trains</span>
+                </a>
+
+                <a href="stations.html" class="nav-item">
+                    <i class="bi bi-building"></i>
+                    <span>Stations</span>
+                </a>
+
+                <a href="schedules.html" class="nav-item active">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Schedules</span>
+                </a>
+
+                <a href="passengers.html" class="nav-item">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Passengers</span>
+                </a>
+
+                <a href="tickets.html" class="nav-item">
+                    <i class="bi bi-ticket-perforated-fill"></i>
+                    <span>Tickets</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="system-status">
+                    <span class="status-dot"></span>
+
+                    <div>
+                        <strong>System Online</strong>
+                        <small>All services running</small>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- PAGE HEADING -->
+            <div class="page-heading">
+                <div>
+                    <span class="welcome-text">SCHEDULE MANAGEMENT</span>
+                    <h1>Manage Schedules</h1>
+                    <p>Add and manage train schedules.</p>
+                </div>
+
+                <div class="dashboard-date">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Schedule Details</span>
+                </div>
+            </div>
+
+
+            <!-- BACK BUTTON -->
+            <div class="mb-3">
+                <a href="dashboard.html" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i>
+                    Go Back
+                </a>
+            </div>
+
+
+            <!-- ADD / EDIT SCHEDULE FORM -->
+            <div class="card schedule-card shadow p-4 mb-4">
+
+                <h3 class="mb-4" id="scheduleFormHeading">
+                    <i class="bi bi-plus-circle"></i>
+                    Add New Schedule
+                </h3>
+
+                <div id="scheduleMessage" aria-live="polite"></div>
+
+                <form id="scheduleForm">
+
+                    <input type="hidden" id="scheduleId">
+
+                    <div class="row">
+
+                        <!-- TRAIN DROPDOWN -->
+                        <div class="col-md-6 mb-3">
+                            <label for="trainSelect" class="form-label">
+                                Select Train
+                            </label>
+
+                            <select id="trainSelect" class="form-select" required>
+                                <option value="">Loading trains...</option>
+                            </select>
+                        </div>
+
+
+                        <!-- TRAIN NUMBER -->
+                        <div class="col-md-6 mb-3">
+                            <label for="trainNumber" class="form-label">
+                                Train Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="trainNumber"
+                                class="form-control"
+                                placeholder="Train number"
+                                readonly
+                                required>
+                        </div>
+
+
+                        <!-- TRAIN NAME -->
+                        <div class="col-md-6 mb-3">
+                            <label for="trainName" class="form-label">
+                                Train Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="trainName"
+                                class="form-control"
+                                placeholder="Train name"
+                                readonly
+                                required>
+                        </div>
+
+
+                        <!-- SOURCE -->
+                        <div class="col-md-6 mb-3">
+                            <label for="source" class="form-label">
+                                Source
+                            </label>
+
+                            <input
+                                type="text"
+                                id="source"
+                                class="form-control"
+                                placeholder="Source station"
+                                readonly
+                                required>
+                        </div>
+
+
+                        <!-- DESTINATION -->
+                        <div class="col-md-6 mb-3">
+                            <label for="destination" class="form-label">
+                                Destination
+                            </label>
+
+                            <input
+                                type="text"
+                                id="destination"
+                                class="form-control"
+                                placeholder="Destination station"
+                                readonly
+                                required>
+                        </div>
+
+
+                        <!-- DEPARTURE TIME -->
+                        <div class="col-md-6 mb-3">
+                            <label for="departureTime" class="form-label">
+                                Departure Time
+                            </label>
+
+                            <input
+                                type="time"
+                                id="departureTime"
+                                class="form-control"
+                                required>
+                        </div>
+
+
+                        <!-- ARRIVAL TIME -->
+                        <div class="col-md-6 mb-3">
+                            <label for="arrivalTime" class="form-label">
+                                Arrival Time
+                            </label>
+
+                            <input
+                                type="time"
+                                id="arrivalTime"
+                                class="form-control"
+                                required>
+                        </div>
+
+
+                        <!-- JOURNEY DATE -->
+                        <div class="col-md-6 mb-3">
+                            <label for="journeyDate" class="form-label">
+                                Journey Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="journeyDate"
+                                class="form-control"
+                                required>
+                        </div>
+
+
+                        <!-- STATUS -->
+                        <div class="col-md-6 mb-3">
+                            <label for="scheduleStatus" class="form-label">
+                                Schedule Status
+                            </label>
+
+                            <select id="scheduleStatus" class="form-select" required>
+                                <option value="">Select Status</option>
+                                <option value="Scheduled">Scheduled</option>
+                                <option value="Delayed">Delayed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <!-- FORM BUTTONS -->
+                    <div class="mt-3 d-flex gap-2 flex-wrap">
+
+                        <button type="submit" id="saveScheduleButton" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i>
+                            Add Schedule
+                        </button>
+
+                        <button type="button" id="cancelScheduleEdit" class="btn btn-secondary" hidden>
+                            Cancel Edit
+                        </button>
+
+                    </div>
+
+                </form>
+            </div>
+
+
+            <!-- SCHEDULE LIST -->
+            <div class="card schedule-card shadow p-4">
+
+                <!-- HEADING + SEARCH ON RIGHT -->
+                <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap schedule-list-heading">
+
+                    <div>
+                        <h3 class="mb-1">
+                            <i class="bi bi-list-ul"></i>
+                            Schedule List
+                        </h3>
+
+                        <p class="text-muted mb-0">
+                            View and manage all train schedules.
+                        </p>
+                    </div>
+
+                    <div class="input-group schedule-search">
+                        <span class="input-group-text">
+                            <i class="bi bi-search"></i>
+                        </span>
+
+                        <input
+                            type="search"
+                            id="scheduleSearch"
+                            class="form-control"
+                            placeholder="Search schedules...">
+                    </div>
+
+                </div>
+
+
+                <!-- TABLE -->
+                <div class="table-responsive mt-4">
+
+                    <table class="table table-bordered table-hover schedule-table">
+
+                        <thead>
+                            <tr>
+                                <th>Train Number</th>
+                                <th>Train Name</th>
+                                <th>Source</th>
+                                <th>Destination</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Journey Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="scheduleTable">
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    Loading schedules...
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+
+
+            <!-- FOOTER -->
+            <footer class="dashboard-footer mt-4">
+                <span>
+                    <i class="bi bi-shield-check"></i>
+                    Train Management System
+                </span>
+
+                <span>Admin Panel</span>
+            </footer>
+
+        </main>
+    </div>
+
+
+    <!-- YOUR SCHEDULE JAVASCRIPT -->
+    <script src="js/schedules.js"></script>
+
+    <script>
+        // Logout
+        document.querySelector(".logout-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "index.html";
+            }
+        });
+    </script>
+
+</body>
+</html>
